@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-
+import React, { Component, cloneElement } from 'react';
+import { Router, Route, Link, browserHistory } from 'react-router'
 
 class App extends Component {
   constructor(props){
@@ -27,8 +27,10 @@ class App extends Component {
     const {users,
     state:{registerTitle},
     refs:{registerHolder},
-    props:{dispatch}
+    props:{dispatch,
+      allStates}
     } = this
+    console.info(allStates)
     const reg = users(registerHolder.login.value, registerHolder.password.value)
     registerHolder.login.value = ''
     registerHolder.password.value = ''
@@ -70,6 +72,7 @@ class App extends Component {
   }
 
   render() {
+
     const {
     props:{allStates},
     state:{registerTitle,
@@ -109,4 +112,67 @@ class App extends Component {
   }
 }
 
-export default App;
+
+class Login extends Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      loginTitle: false
+    }
+  }
+  onSubmitLogin = (event) => {
+    event.preventDefault()
+    const {props:{allStates},
+      state:{loginTitle},
+      refs:{loginHolder}
+    } = this
+    const login = loginHolder.login.value
+    const password = loginHolder.password.value
+    console.info(allStates)
+
+    if(allStates.users.length === 0){
+      alert("Sorry, you are not registered")
+    }
+    for(let i of allStates.users) {
+      if (login === i.login && password === i.password) {
+        this.setState({loginTitle: !loginTitle})
+      } else {alert("Sorry, you are not registered")}
+    }
+    loginHolder.login.value = ''
+    loginHolder.password.value = ''
+  }
+
+  render(){
+    const {
+      state:{loginTitle},
+      onSubmitLogin,
+    } = this
+    return (
+        <div id="loginField">
+          <h3>{!loginTitle ? 'Please login' : 'Glad to see you again'}</h3>
+          <form onSubmit={onSubmitLogin} ref="loginHolder">
+            <input type="text" name="login" placeholder="login" required />
+            <input type="text" name="password" placeholder="password" required />
+            <button type="submit">Login</button>
+          </form>
+        </div>
+    )
+  }
+}
+
+class Bohdan extends Component{
+  render(){
+    const {allStates, dispatch} = this.props
+
+    return(
+
+      <Router history={browserHistory} allStates = {allStates} dispatch ={dispatch}>
+      <Route path='/' component={cloneElement(App, {allStates:allStates, dispatch:dispatch})} />
+      </Router>
+    )
+  }
+}
+
+export {App}
+export {Login}
+export {Bohdan}

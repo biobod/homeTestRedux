@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { Router, Route, Link, browserHistory } from 'react-router'
+import {App, Login, Bohdan} from './App';
 import { createStore } from 'redux'
 import {users, popUpShown} from './reducer'
 import {combineReducers} from 'redux'
@@ -19,10 +20,8 @@ const dispatch = action => {
 
 const render = () => {
   ReactDOM.render(
-    <App
-      allStates={store.getState()}
-      dispatch = {dispatch}
-    />,
+    <Bohdan allStates={store.getState()}
+            dispatch = {dispatch} />,
     document.getElementById('root')
   )
 }
