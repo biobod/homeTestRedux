@@ -11,28 +11,25 @@ class App extends Component {
     }
   }
 
-  registerUser = (login, password) => ({
+  users = (login, password) => ({
     type: 'REGISTER_USER',
     login,
     password,
   })
 
-  showAll = (filter) => ({
+  popUpShown = (filter) => ({
     type: 'SHOW_ALL',
     filter
   })
 
   onSubmitRegister = (event) =>{
     event.preventDefault()
-    const {props:{
-      dispatch,
-      allStates
-    },
+    const {users,
     state:{registerTitle},
     refs:{registerHolder},
-    registerUser
+    props:{dispatch}
     } = this
-    const reg = registerUser(registerHolder.login.value, registerHolder.password.value)
+    const reg = users(registerHolder.login.value, registerHolder.password.value)
     registerHolder.login.value = ''
     registerHolder.password.value = ''
     dispatch(reg)
@@ -50,10 +47,10 @@ class App extends Component {
     const login = loginHolder.login.value
     const password = loginHolder.password.value
 
-    if(allStates.registerUser.length === 0){
+    if(allStates.users.length === 0){
       alert("Sorry, you are not registered")
     }
-    for(let i of allStates.registerUser) {
+    for(let i of allStates.users) {
       if (login === i.login && password === i.password) {
         this.setState({loginTitle: !loginTitle})
       } else {alert("Sorry, you are not registered")}
@@ -65,9 +62,9 @@ class App extends Component {
   showAlert = () =>{
     const {dispatch,
       allStates} = this.props
-    const {showAll} = this
-     dispatch(showAll(allStates.showPop))
-    if(allStates.showPop){
+    const {popUpShown} = this
+     dispatch(popUpShown(allStates.popUpShown))
+    if(allStates.popUpShown){
        alert("Show beautiful picture ")
     }
   }
@@ -108,8 +105,7 @@ class App extends Component {
        <button onClick={showAlert}>Show a great picture</button>
      </div>
    </div>
-
-    );
+    )
   }
 }
 

@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { createStore } from 'redux'
-import {registerUser, loginUser, showPop} from './reducer'
+import {users, popUpShown} from './reducer'
 import {combineReducers} from 'redux'
 
 const allReducers = combineReducers({
-  registerUser,
-  showPop
+  users,
+  popUpShown
 })
 
 const store = createStore(allReducers)

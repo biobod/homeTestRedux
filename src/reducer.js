@@ -1,5 +1,5 @@
 
-function registerUser(state=[], action) {
+const users = (state=[], action) => {
   switch (action.type){
     case 'REGISTER_USER':
       return [
@@ -9,21 +9,19 @@ function registerUser(state=[], action) {
         password: action.password,
         }
       ]
-
     default: return state
   }
 }
 
 
-function showPop (state=true, action) {
+const popUpShown = (state=true, action) => {
   switch (action.type){
     case 'SHOW_ALL':
      return !action.filter
-
     default: return state
   }
 
 }
 
-export {registerUser}
-export {showPop}
+export {users}
+export {popUpShown}
