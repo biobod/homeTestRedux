@@ -7,7 +7,6 @@ function registerUser(state=[], action) {
         id: action.id,
         login: action.login,
         password: action.password,
-        active: action.active
         }
       ]
 
@@ -15,18 +14,6 @@ function registerUser(state=[], action) {
   }
 }
 
-function loginUser(state={}, action) {
-  switch (action.type){
-    case 'LOGIN_USER':
-      return {
-          id: action.id,
-          login: action.login,
-          password: action.password
-        }
-
-    default: return state
-  }
-}
 
 function showPop (state=true, action) {
   switch (action.type){
@@ -39,5 +26,4 @@ function showPop (state=true, action) {
 }
 
 export {registerUser}
-export {loginUser}
 export {showPop}

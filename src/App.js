@@ -2,94 +2,102 @@ import React, { Component } from 'react';
 
 
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      registerTitle: false,
+      newUserRegister: false,
+      loginTitle: false
+    }
+  }
 
   registerUser = (login, password) => ({
     type: 'REGISTER_USER',
-    action: true,
     login,
     password,
-
   })
 
-  loginUser = (login, password) =>({
-    type: 'LOGIN_USER',
-    login,
-    password
-  })
   showAll = (filter) => ({
     type: 'SHOW_ALL',
     filter
   })
 
-
   onSubmitRegister = (event) =>{
     event.preventDefault()
     const {props:{
       dispatch,
-      registerText
+      allStates
     },
-    refs:{registerHolder}
+    state:{registerTitle},
+    refs:{registerHolder},
+    registerUser
     } = this
-    const {registerUser} = this
     const reg = registerUser(registerHolder.login.value, registerHolder.password.value)
     registerHolder.login.value = ''
     registerHolder.password.value = ''
     dispatch(reg)
-    console.info(registerText.showPop)
+    this.setState({registerTitle: true})
+    this.setState({newUserRegister: true})
 
   }
-  onSubmitLogin = (event) =>{
+
+  onSubmitLogin = (event) => {
     event.preventDefault()
-    const {props:{
-      dispatch
-    },
+    const {props:{allStates},
+      state:{loginTitle},
       refs:{loginHolder}
     } = this
-    const {registerUser} = this
-    const reg = registerUser(loginHolder.login.value, loginHolder.password.value)
+    const login = loginHolder.login.value
+    const password = loginHolder.password.value
+
+    if(allStates.registerUser.length === 0){
+      alert("Sorry, you are not registered")
+    }
+    for(let i of allStates.registerUser) {
+      if (login === i.login && password === i.password) {
+        this.setState({loginTitle: !loginTitle})
+      } else {alert("Sorry, you are not registered")}
+    }
     loginHolder.login.value = ''
     loginHolder.password.value = ''
-    dispatch(reg)
-
   }
-  showAllElement = () =>{
-    const {dispatch,
-      registerText} = this.props
-    const {showAll} = this
 
-     dispatch(showAll(registerText.showPop))
-    if(registerText.showPop){
-       alert("DDD")
+  showAlert = () =>{
+    const {dispatch,
+      allStates} = this.props
+    const {showAll} = this
+     dispatch(showAll(allStates.showPop))
+    if(allStates.showPop){
+       alert("Show beautiful picture ")
     }
   }
 
-
   render() {
     const {
-      props:{
-      registerText,
-      loginText
-    },
+    props:{allStates},
+    state:{registerTitle,
+    loginTitle,
+    newUserRegister},
     onSubmitRegister,
     onSubmitLogin,
-    showAllElement
+    showAlert
    } = this
     return (
    <div>
        <div id="registerField">
-       <h3>d</h3>
+       <h3>{!registerTitle ? 'Please register' : 'Welcome'}</h3>
        <form onSubmit={onSubmitRegister} ref='registerHolder'>
-       <input type="text" name="login" placeholder="login"/>
-       <input type="text" name="password" placeholder="password"/>
-       <button type="submit">Register</button>
+       <input type="text" name="login" placeholder="login" required/>
+       <input type="text" name="password" placeholder="password" required/>
+       <button type="submit">{!newUserRegister ? 'Register' : 'Register new user?'}</button>
      </form>
      </div>
        <br/>
      <div id="loginField">
-       <h3>{loginText}</h3>
+       <h3>{!loginTitle ? 'Please login' : 'Glad to see you again'}</h3>
        <form onSubmit={onSubmitLogin} ref="loginHolder">
-         <input type="text" name="login" placeholder="login"/>
-         <input type="text" name="password" placeholder="password"/>
+         <input type="text" name="login" placeholder="login" required />
+         <input type="text" name="password" placeholder="password" required />
          <button type="submit">Login</button>
        </form>
      </div>
@@ -97,7 +105,7 @@ class App extends Component {
      <br/>
      <br/>
      <div id="somePopup">
-       <button onClick={showAllElement}>Show great picture</button>
+       <button onClick={showAlert}>Show a great picture</button>
      </div>
    </div>
 
