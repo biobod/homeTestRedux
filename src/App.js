@@ -1,5 +1,5 @@
 import React, { Component, cloneElement } from 'react';
-import { Router, Route, Link, browserHistory } from 'react-router'
+
 
 class App extends Component {
   constructor(props){
@@ -22,23 +22,26 @@ class App extends Component {
     filter
   })
 
+
   onSubmitRegister = (event) =>{
     event.preventDefault()
     const {users,
-    state:{registerTitle},
+    state:{registerTitle,
+      newUserRegister},
     refs:{registerHolder},
     props:{dispatch,
       allStates}
     } = this
     console.info(allStates)
+    this.setState({registerTitle: true})
+    this.setState({newUserRegister: true})
     const reg = users(registerHolder.login.value, registerHolder.password.value)
     registerHolder.login.value = ''
     registerHolder.password.value = ''
     dispatch(reg)
-    this.setState({registerTitle: true})
-    this.setState({newUserRegister: true})
 
   }
+
 
   onSubmitLogin = (event) => {
     event.preventDefault()
@@ -72,7 +75,6 @@ class App extends Component {
   }
 
   render() {
-
     const {
     props:{allStates},
     state:{registerTitle,
@@ -160,19 +162,7 @@ class Login extends Component{
   }
 }
 
-class Bohdan extends Component{
-  render(){
-    const {allStates, dispatch} = this.props
-
-    return(
-
-      <Router history={browserHistory} allStates = {allStates} dispatch ={dispatch}>
-      <Route path='/' component={cloneElement(App, {allStates:allStates, dispatch:dispatch})} />
-      </Router>
-    )
-  }
-}
 
 export {App}
 export {Login}
-export {Bohdan}
+
