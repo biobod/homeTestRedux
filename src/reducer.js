@@ -14,14 +14,4 @@ const users = (state=[], action) => {
 }
 
 
-const popUpShown = (state=true, action) => {
-  switch (action.type){
-    case 'SHOW_ALL':
-     return !action.filter
-    default: return state
-  }
-
-}
-
 export {users}
-export {popUpShown}

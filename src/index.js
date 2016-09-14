@@ -1,36 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, browserHistory } from 'react-router'
-import {App, Login} from './App';
+import connectApp from './App';
+import connectLogin from './login';
+import connectRegister from './register';
 import { createStore } from 'redux'
-import {users, popUpShown} from './reducer'
+import {users} from './reducer'
 import {combineReducers} from 'redux'
+import { Provider } from 'react-redux'
 
 const allReducers = combineReducers({
-  users,
-  popUpShown
+  users
 })
 
-const store = createStore(allReducers)
+const store = createStore(allReducers, window.devToolsExtension && window.devToolsExtension())
 
-const dispatch = action => {
-  store.dispatch(action)
-}
 
-const reduxRender = () => {
-  ReactDOM.render(
-    <App allStates={store.getState()}
-            dispatch = {dispatch} />,
+ReactDOM.render(
+    <Provider store={store}>
+      <Router history={browserHistory}>
+        <Route path="/" component={connectApp} />
+        <Route path="/login" component={connectLogin} />
+        <Route path="/register" component={connectRegister} />
+      </Router>
+    </Provider>,
     document.getElementById('root')
-  )
-}
-
-ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path="/" component={()=>(<App allStates={store.getState()} dispatch ={dispatch} />)} />
-    <Route path="/login" component={Login} />
-  </Router>
-), document.getElementById('root'))
+)
 
 
-store.subscribe(reduxRender)
+
