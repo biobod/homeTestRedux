@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router'
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+
 import connectApp from './App';
 import connectLogin from './login';
 import connectRegister from './register';
-import { createStore } from 'redux'
 import {users, login} from './reducer'
-import {combineReducers} from 'redux'
-import { Provider } from 'react-redux'
 
 const allReducers = combineReducers({
   users,

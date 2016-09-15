@@ -4,7 +4,7 @@ const actions = {
     login,
     password
   }),
-  login: (active) => ({
+  login: active => ({
     type: 'LOGIN',
     active:active
   })
