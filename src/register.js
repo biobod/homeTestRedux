@@ -1,70 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { Field, reduxForm, formValueSelector } from 'redux-form'
 import actions from './actions'
 
-class Register extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      registerTitle: false
-    }
+
+class RegisterForm extends Component{
+
+   onclickSubmitForm = ({login, password}) =>{
+   const {register, loginAction, login:loginState} = this.props
+     if(!loginState) {
+       register(login, password)
+       browserHistory.push('/login')
+     }
   }
-
-  onSubmitRegister = (event) => {
-    event.preventDefault()
-    const {
-      refs:{ login, password },
-      props:{
-        register,
-        loginAction
-      }
-    } = this
-    this.setState({ registerTitle: true })
-
-    register(login.value, password.value)
-
-    login.value = ''
-    password.value = ''
-
-    loginAction(false)
+  goToLogout = ()=>{
     browserHistory.push('/login')
   }
+render() {
+  const {
+  onclickSubmitForm,
+  goToLogout,
+  props:{handleSubmit, login,
+      submitting}
+  }= this
 
-  render() {
-    const {
-      onSubmitRegister,
-      state:{ registerTitle }
-    } = this
-    return (
-      <div id="registerField">
-        <h3>{registerTitle ? 'Welcome' : 'Please register'}</h3>
-        <form onSubmit={onSubmitRegister}>
-          <input
-            type="text"
-            name="login"
-            ref="login"
-            placeholder="login"
-            required
-          />
-
-          <input
-            type="text"
-            name="password"
-            ref="password"
-            placeholder="password"
-            required
-          />
-          <button type="submit">Register</button>
-        </form>
-      </div>
-    )
+  return (
+    <div>
+      {!login && <form onSubmit={handleSubmit(onclickSubmitForm)}>
+        <div>
+          <h3>Please register</h3>
+           <Field name="login" component="input" type="text" placeholder="login" required/>
+            <Field name="password" component="input" type="text" placeholder="password" required />
+        </div>
+        <button type="submit" disabled={submitting}>Ok</button>
+      </form>}
+      {login && <div>
+      <h2>Please logout first</h2>
+      <button onClick={goToLogout}>Please Logout first</button>
+        </div>}
+    </div>)
   }
 }
 
-const connectedRegister = connect(null, {
+const Register = reduxForm({
+  form: 'registerform'
+})(RegisterForm);
+
+
+const connectedRegister = connect(state=>({login: state.login}), {
   register: actions.register,
   loginAction: actions.login
 })(Register)
 
 export default connectedRegister
+

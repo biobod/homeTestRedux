@@ -1,58 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { browserHistory, Link } from 'react-router'
+import { Field, reduxForm, reset } from 'redux-form'
+
 import actions from './actions'
 
-class Inputs extends Component {
-  hideStyle = {
-    display: 'none'
-  }
-  showStyle = {
-    display: 'block',
-    margin: 10 + 'px'
-  }
 
-  render() {
+
+
+class LoginForm extends Component{
+
+  onSubmitLogin = ({login, password}) => {
     const {
-      hideStyle,
-      showStyle,
-      props:{ login }
-    } = this
-    return (
-      <div>
-        <input type="text" name="login" placeholder="login" style={ login ? hideStyle : showStyle} />
-        <input type="text" name="password" placeholder="password" style={ login ? hideStyle : showStyle} />
-        <button type="submit">{!login ? 'Login' : 'Logout'}</button>
-      </div>
-    )
-  }
-}
-
-class Login extends Component {
-
-  onSubmitLogin = event => {
-    event.preventDefault()
-
-    const {
-      refs:{ loginHolder },
       props:{
         login: stateLogin,
-        users, loginAction
+        users, loginAction,
+        resetForm, createRecord,
+        reset1
       }
     } = this
 
-    const login = loginHolder.login.value
-    const password = loginHolder.password.value
-
-    loginHolder.login.value = ''
-    loginHolder.password.value = ''
+    resetForm('loginform')
 
     if (users.length === 0) {
       alert("Sorry, you are not registered")
       return
     }
 
-    let isUserFound = users.find(({ login: userLogin, password: userPassword }) => login === userLogin && password === userPassword)
+    let isUserFound = users.find(
+      ({ login: userLogin, password: userPassword }) =>login === userLogin && password === userPassword)
+
 
     if (stateLogin) {
       return loginAction(false)
@@ -60,24 +37,28 @@ class Login extends Component {
 
     if (isUserFound) {
       loginAction(true)
+
     } else {
       alert("Sorry, your login or password wrong")
+
     }
   }
 
-  render() {
+  render(){
     const {
-      onSubmitLogin,
-      props:{ login }
-    } = this
+    onSubmitLogin,
+    props:{
+      handleSubmit,
+      submitting,
+      login }
+    }=this
     return (
       <div>
         <h3>{login ? 'Glad to see you' : 'Please login'}</h3>
-        <form
-          onSubmit={onSubmitLogin}
-          ref="loginHolder"
-        >
-          <Inputs login={login} />
+        <form onSubmit={handleSubmit(onSubmitLogin)}>
+          {!login && <Field type="text" component="input" name="login" placeholder="login" />}
+          {!login && <Field type="text"  component="input" name="password" placeholder="password"  />}
+            <button type="submitting">{!login ? 'Login' : 'Logout'}</button>
           <br />
           <br />
           <Link to="/">
@@ -89,11 +70,16 @@ class Login extends Component {
   }
 }
 
+const Login = reduxForm({
+  form: 'loginform'
+})(LoginForm);
+
 const connectedLogin = connect(state => ({
     login: state.login,
     users: state.users
   }),
-  { loginAction: actions.login }
+  { loginAction: actions.login,
+    resetForm: reset}
 )(Login)
 
 export default connectedLogin
