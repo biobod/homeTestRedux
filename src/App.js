@@ -2,19 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-
-
-class App extends Component {
-  constructor(props){
-    super(props)
-
-  }
-
-  render() {
-    const {
-      props:{s}
-    }
-     = this
+class App extends Component{
+  render(){
+    const s = this.props
     return (
    <div>
      <div id="registerField">
@@ -35,14 +25,6 @@ class App extends Component {
   }
 }
 
-const connectedApp = connect(state => ({ s: state }), { register: (login, password) => ({
-  type: 'REGISTER_USER',
-  login,
-  password,
-}) })(App)
-
-
+const connectedApp = connect(state => ({ s: state }), {})(App)
 
 export default connectedApp
-
-

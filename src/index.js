@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, browserHistory } from 'react-router'
+import { Router, Route, browserHistory } from 'react-router'
 import connectApp from './App';
 import connectLogin from './login';
 import connectRegister from './register';
 import { createStore } from 'redux'
-import {users} from './reducer'
+import {users, login} from './reducer'
 import {combineReducers} from 'redux'
 import { Provider } from 'react-redux'
 
 const allReducers = combineReducers({
-  users
+  users,
+  login
 })
 
 const store = createStore(allReducers, window.devToolsExtension && window.devToolsExtension())
-
 
 ReactDOM.render(
     <Provider store={store}>
@@ -26,6 +26,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 )
-
-
-

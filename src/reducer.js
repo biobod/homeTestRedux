@@ -13,5 +13,14 @@ const users = (state=[], action) => {
   }
 }
 
+const login = (state=false, action) => {
+  switch (action.type) {
+    case 'LOGIN':
+      state = action.active
+    default:
+      return state
+  }
+}
 
 export {users}
+export {login}
