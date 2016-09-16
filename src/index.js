@@ -18,8 +18,6 @@ const allReducers = combineReducers({
 
 const store = createStore(allReducers, window.devToolsExtension && window.devToolsExtension())
 
-
-
 ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>

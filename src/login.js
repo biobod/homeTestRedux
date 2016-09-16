@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { browserHistory, Link } from 'react-router'
+import { Link } from 'react-router'
 import { Field, reduxForm, reset } from 'redux-form'
 
 import actions from './actions'
@@ -15,9 +15,7 @@ class LoginForm extends Component{
       props:{
         login: stateLogin,
         users, loginAction,
-        resetForm, createRecord,
-        reset1
-      }
+        resetForm}
     } = this
 
     resetForm('loginform')
@@ -30,17 +28,14 @@ class LoginForm extends Component{
     let isUserFound = users.find(
       ({ login: userLogin, password: userPassword }) =>login === userLogin && password === userPassword)
 
-
     if (stateLogin) {
       return loginAction(false)
     }
 
     if (isUserFound) {
       loginAction(true)
-
     } else {
       alert("Sorry, your login or password wrong")
-
     }
   }
 
@@ -58,11 +53,11 @@ class LoginForm extends Component{
         <form onSubmit={handleSubmit(onSubmitLogin)}>
           {!login && <Field type="text" component="input" name="login" placeholder="login" />}
           {!login && <Field type="text"  component="input" name="password" placeholder="password"  />}
-            <button type="submitting">{!login ? 'Login' : 'Logout'}</button>
+          <button type={submitting}>{!login ? 'Login' : 'Logout'}</button>
           <br />
           <br />
           <Link to="/">
-            <button>Main page</button>
+          <button>Main page</button>
           </Link>
         </form>
       </div>

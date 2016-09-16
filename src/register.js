@@ -1,52 +1,51 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Field, reduxForm, formValueSelector } from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
 import actions from './actions'
 
 
 class RegisterForm extends Component{
 
-   onclickSubmitForm = ({login, password}) =>{
+  onclickSubmitForm = ({login, password}) => {
    const {register, loginAction, login:loginState} = this.props
      if(!loginState) {
        register(login, password)
        browserHistory.push('/login')
      }
   }
-  goToLogout = ()=>{
+  goToLogout = ()=> {
     browserHistory.push('/login')
   }
-render() {
-  const {
-  onclickSubmitForm,
-  goToLogout,
-  props:{handleSubmit, login,
-      submitting}
-  }= this
+  render() {
+    const {
+    onclickSubmitForm,
+    goToLogout,
+    props:{handleSubmit, login,
+        submitting}
+    }= this
 
-  return (
+  return(
     <div>
-      {!login && <form onSubmit={handleSubmit(onclickSubmitForm)}>
+      { !login && <form onSubmit={handleSubmit(onclickSubmitForm)}>
         <div>
           <h3>Please register</h3>
-           <Field name="login" component="input" type="text" placeholder="login" required/>
-            <Field name="password" component="input" type="text" placeholder="password" required />
+          <Field name="login" component="input" type="text" placeholder="login" required/>
+          <Field name="password" component="input" type="text" placeholder="password" required />
         </div>
         <button type="submit" disabled={submitting}>Ok</button>
-      </form>}
-      {login && <div>
+      </form> }
+      { login && <div>
       <h2>Please logout first</h2>
       <button onClick={goToLogout}>Please Logout first</button>
-        </div>}
+      </div> }
     </div>)
   }
 }
 
 const Register = reduxForm({
-  form: 'registerform'
+  form: 'registerForm'
 })(RegisterForm);
-
 
 const connectedRegister = connect(state=>({login: state.login}), {
   register: actions.register,
@@ -54,4 +53,3 @@ const connectedRegister = connect(state=>({login: state.login}), {
 })(Register)
 
 export default connectedRegister
-
